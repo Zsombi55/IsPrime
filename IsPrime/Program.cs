@@ -20,7 +20,7 @@ namespace IsPrime
 		public static void Main(string[] args)
 		{
 			Program P = new Program();
-			double n = 537430451; // Prime?: true | Deletable?: true, 3.
+			double n = 537430451; // Prime?: true | Deletable?: true, viable routes: 3.
 			
 			Console.WriteLine("Is prime? {0}", P.IsPrime(n));
 			
@@ -44,8 +44,8 @@ namespace IsPrime
 			return p;
 		}
 		
-// ----- Is Deletable -----
-		private bool IsDeletable(double n){
+// ----- Is Deletable ----- // clearly there are C# method/syntax differences from JS.
+		private bool IsDeletable(double n) {
 			string s = n.ToString();
 			bool d = true;
 			
@@ -54,7 +54,7 @@ namespace IsPrime
 			
 			if (!d) {
 				d = false;
-				break; // this worked fine in JS :(
+				break;
 			}
 			return d;
 		}
@@ -63,8 +63,8 @@ namespace IsPrime
 			int le = s.Length;
 
 			for (int i = 0 ; i < le; i++) {
-				string tl = s.Slice(i, le); // clearly the C# method/syntax is something else for cutting up strings.
-				if (IsPrime(tl)) {
+				string tl = s.Slice(i, le);
+				if (IsPrime(string tl)) {
 					Console.WriteLine(tl);
 				}
 			}
@@ -74,8 +74,8 @@ namespace IsPrime
 			int le = s.Length;
 
 			for (int i = 0 ; i < le; i++) {
-				string tr = s.Slice(0, le - i); // clearly the C# method/syntax is something else for cutting up strings.
-				if (IsPrime(tr)) {
+				string tr = s.Slice(0, le - i);
+				if (IsPrime(string tr)) {
 					Console.WriteLine(tr);
 				}
 			}
