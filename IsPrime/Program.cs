@@ -9,7 +9,7 @@
  * then the "original" was a Deletable Prime; if also true, the number of viable "routes" are to be noted, eg.:
  * 4125673:12, 41256793:21, 537430451:3, 200899998:0, 537499093:8, 2147483059:8
  * 
- * THIS IS INCOMPLETE. I wanted to upload this code anyway, as proof that I have tried to code it.
+ * THIS IS INCOMPLETE. Have not figured out how to code the Deletable check.
  */
 using System;
 
@@ -24,11 +24,14 @@ namespace IsPrime
 			
 			Console.WriteLine("Is prime? {0}", P.IsPrime(n));
 			
-//			if (isPrime(n)) {Console.WriteLine("Is deletable? " + isDeletable(n));}
+			if (P.IsPrime(n)) {
+				Console.WriteLine("Is deletable? ", P.IsDeletable(n));
+			}
 
 			Console.ReadLine();
 		}
 		
+// ----- Is Prime -----
 		private bool IsPrime(double n) {
 			double sqrtN = Math.Floor(Math.Sqrt(n));   // no decimals
 			bool p = n != 1;     // boolean
@@ -41,6 +44,41 @@ namespace IsPrime
 			return p;
 		}
 		
-//		private bool IsDeletable(double n){}
+// ----- Is Deletable -----
+		private bool IsDeletable(double n){
+			string s = n.ToString();
+			bool d = true;
+			
+			TruncateLeft(s);
+			TruncateRight(s);
+			
+			if (!d) {
+				d = false;
+				break; // this worked fine in JS :(
+			}
+			return d;
+		}
+		
+		private void TruncateLeft(string s) { // truncate sequence from left
+			int le = s.Length;
+
+			for (int i = 0 ; i < le; i++) {
+				string tl = s.Slice(i, le); // clearly the C# method/syntax is something else for cutting up strings.
+				if (IsPrime(tl)) {
+					Console.WriteLine(tl);
+				}
+			}
+		}
+
+		private void TruncateRight(string s) { // truncate sequence from right
+			int le = s.Length;
+
+			for (int i = 0 ; i < le; i++) {
+				string tr = s.Slice(0, le - i); // clearly the C# method/syntax is something else for cutting up strings.
+				if (IsPrime(tr)) {
+					Console.WriteLine(tr);
+				}
+			}
+		}
 	}
 }
