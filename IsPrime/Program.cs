@@ -41,6 +41,6 @@ namespace IsPrime
 			return p;
 		}
 		
-		private bool IsDeletable(double n){}
+//		private bool IsDeletable(double n){}
 	}
 }
