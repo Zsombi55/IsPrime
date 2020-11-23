@@ -1,2 +1,0 @@
-D:\Tanulas\C# .NET\IsPrime\IsPrime\obj\Debug\IsPrime.csprojResolveAssemblyReference.cache
-D:\SULI\C# .NET\IsPrime\IsPrime\obj\Debug\IsPrime.csprojResolveAssemblyReference.cache
