@@ -10,6 +10,12 @@
  * 4125673:12, 41256793:21, 537430451:3, 200899998:0, 537499093:8, 2147483059:8
  * 
  * THIS IS INCOMPLETE. Have not figured out how to code the Deletable check.
+ * 
+ * =>> Input -> Validation (numbers only) -> Useless character removal (symbols, pre- & post-useful_nr zeroes) if user disregards instructions..
+ *			-> Check IF input IsPrime ~~>> else there is no use continuing.
+ * -->> A. make backup -> B. remove digit -> C. IsPrime(rest) ? ~~> FALSE: return to B. now removing a different digit now (4567 _567 -> _467)..
+ * 			~~> TRUE: save result somewhere -> return to B. using this result (467 _67) ->[..]-> if result is 1 digit long & IsPrime -> routes 0 += 1
+ * This is to be repeated on all viable results, counting all routes.
  */
 using System;
 using System.Text;
@@ -21,49 +27,43 @@ namespace IsPrime
 		public static void Main(string[] args)
 		{
 			Program P = new Program();
-			double number = -0053743045.100; // Test, length: 9.  Prime?: true | Deletable?: true, viable routes: 3.
-			
-/* - while testing.
-			
-  			Console.WriteLine("Enter number (valid symbols are the negative & decimal markers):");
-			string data = Console.ReadLine();
-			
-			if(Double.TryParse(data, out number)) // Validity check; also removes unnecesary zeroes.
-				Console.WriteLine("Is  {0}  a prime? {1}.\r\n", number, P.IsPrime(number));				
-			else
-				Console.WriteLine("'{0}' is not a valid number.", data);
-*/
-			Console.WriteLine("Is  {0}  a prime? {1}.\r\n", number, P.IsPrime(number)); // - Test.
-			
-			if (P.IsPrime(number)) {
-				P.HowLong(number);
-				Console.WriteLine("Is deletable? {0}", P.IsDeletable(number));
+//			Console.WriteLine("Use positive whole numbers! Enter number:"); string inputData = Console.ReadLine();
+			string inputData = "-s001086,70"; // Test, (useful) length: 5.  Prime?: true | Deletable?: true, viable routes: 4.
+//			string inputData = "-004056,70"; // Prime?: false.
+
+			string data = P.IsValid(inputData); // Check if input is prime else no reason to continue.
+			if(data == "0") { Console.WriteLine("\n{0}  is not a valid number.", inputData); Console.ReadKey(); }
+			else {
+				Console.WriteLine("Work data: {0}", data);
+				Console.WriteLine("\nIs  {0}  a prime? {1}.\r\n", P.NoZero(inputData), P.IsPrime(data)); Console.ReadKey();
 			}
-
-			Console.ReadKey();
-//			EndApp();
 		}
 
-		private void HowLong(double n) { // check 'data' instead after test !
-			string sn = n.ToString();
-			int length = sn.Length;
-			if(sn.Contains("-")) length--;
-			if(sn.Contains(",")) length--;
-			if(sn.Contains(".")) length--;
-			Console.WriteLine("Length: {0}", length);
+// ----- Helper Functions -----
+		private double NoZero(string inputData) { // remove useless zeroes.
+			double d; Double.TryParse(inputData, out d);
+			return d;
 		}
-		
-//TODO: either in HowLong or below : remove decimal & minus markers before truncating to make it easier
-//			there is no Math done that would make a differnce in the outcome,
-//			unless one wishes to display all viable route elements, then they would need to be put back..
-//			or just skip them during truncating upon encountering them under the "target index" of the respective loop cycle ??
 
-//TODO: so far it performs only "1st level" check.. the viable elements of it are not checked.
-//			Each ok element has to be stored then later ran through the same check.. and so on
-//			until there are no more viable routes OR all single digit ones have been checked.
-//		It's basically like building a tree graph with the start node being the user given value and all child/leaf nodes the viable elements.
+		private string IsValid(string inputData) { // check 'data' instead after test !
+			try {
+				string dt = NoZero(inputData).ToString(); // d.ToString();
+				Console.WriteLine("double: {0}", NoZero(inputData));
+				Console.WriteLine("0-less string : {0}", dt);
+					// apparently bad but won't get into Regex now.
+				if(dt.Contains("-")) { dt = dt.Replace("-", ""); }
+				if(dt.Contains(",")) { dt = dt.Replace(",", ""); }
+				if(dt.Contains(".")) { dt = dt.Replace(".", ""); }
+				
+				Console.WriteLine("cleared string {0}", dt);
+				return dt;
+			}
+			catch {
+				return "0";
+			}
+		}
 	
-		private void TruncateLeft(string s) { // truncate sequence from left
+		private void RemoveCharacter(string s) { // truncate sequence from left TODO doesn't work as intended; put into list, array, file or smt. ?
 			int le = s.Length;
 			for (int i = 0; i < le; ++i) {
 				StringBuilder sb = new StringBuilder(s);
@@ -73,30 +73,38 @@ namespace IsPrime
 		}
 		
 // ----- Is Prime -----
-		private bool IsPrime(double n) {
-			double sqrtN = Math.Floor(Math.Sqrt(n));   // no decimals
-			bool p = (n != 1);     // boolean
+		private bool IsPrime(string data) {
+			int n; Int32.TryParse(data, out n);
+			double sqrtN = Math.Sqrt(n);
+			bool b = (n != 1);     // boolean
 			for(int i = 2; i < sqrtN + 1; i++) {
 				if(n % i == 0) {
-					p = false;
+					b = false;
 					break;
 				}
 			}
-			return p;
+			return b;
 		}
 		
-// ----- Is Deletable -----
+// ----- Is Deletable -----TODO
 
-		private bool IsDeletable(double n) {
-			string s = n.ToString();
-			bool d = true;
-			
-			TruncateLeft(s);
-
-			if (!d) {
-				d = false;
-			}
-			return d;
-		}
+//		private int IsDeletable(string data) {
+//			int n; Int32.TryParse(data, out n);
+//			int le = n.ToString().Length;
+//			int r = 0;
+//			
+//			for (int i = 0; i < le; i++)
+//			{
+//				no = n.ToString().Length;
+//				string dt = RemoveCharacter(string s);
+//
+//				if (IsPrime(dt))
+//				{
+//					if ( dt / 10 == 0 ) { p++; }
+//					else { IsDeletable(le, dt, r ); }
+//				}
+//			}
+//			return r;
+//		}
 	}
 }
