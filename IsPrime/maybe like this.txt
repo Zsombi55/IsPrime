@@ -1,0 +1,32 @@
+My current thought process is this, which may or may not be viable/correct.
+
+get & validate input;
+Prime-Checker(number); // if input is not prime there is no need to go further.
+
+
+int routes, i = 0;
+Del_Checker(nr, i) {
+  for (i = 0; i < nr.Length; i++) {
+  Digit_Cutter(nr) -> rest;
+  Prime-Checker(rest) =>> IF FALSE {
+    i++;
+	recursive call Del_Checker(nr, i);
+  }  ELSE  =>> IF TRUE {
+      save 'rest';  // StringBuilder -> in a text file ?
+	  IF(rest.Length == 1) { routes++; }
+	 }
+  }
+}
+
+i = 0;
+int j = 0;
+Get the list of all saved 'rest' values;
+Save_Checker(list, j) {
+  for(j = 0; j < list[j].Length; j++) {
+    call Del_Checker(list[j], i);
+	Get the list of all latest saved 'rest' values;
+	i, j = 0;
+    recursive call Save_Checker(list, j);
+  }
+  Return routes;
+}
